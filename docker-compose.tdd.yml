@@ -1,0 +1,30 @@
+version: "3.9"
+services:
+  db:
+    image: mysql
+    volumes:
+      - mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=task_manager_test
+  tdd:
+    tty: true
+    stdin_open: true
+    build: .
+    container_name: task-manager-tdd
+    command: >
+      bash -c "bundle && \
+               bundle exec rake db:create && \
+               bundle exec rake db:migrate && \
+               echo \"I'm ready. Happy TDDing!\" && \
+               sleep infinity"
+    volumes:
+      - .:/app
+      - bundler_gems:/usr/local/bundle
+    environment:
+      - RAILS_ENV=test
+    depends_on:
+      - db
+volumes:
+  mysql:
+  bundler_gems:
