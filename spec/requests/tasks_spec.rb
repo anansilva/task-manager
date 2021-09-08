@@ -8,22 +8,36 @@ describe 'Tasks', type: :request do
       end
 
       context 'user is a manager' do
+        before 'create tasks' do
+          create_list(:task, 2)
+        end
+
         let(:user) { create(:user, role: 0) }
 
         it 'allows the manager to see all tasks' do
           get '/api/v1/tasks'
 
           expect(response.status).to eq(200)
+          expect(JSON.parse(response.body).size).to eq(2)
         end
       end
 
       context 'user is a technician' do
         let(:user) { create(:user, role: 1) }
 
-        it 'does not allow the technician to see all tasks' do
+        before 'create a task for the technician' do
+          create(:task, user: user)
+        end
+
+        before 'create a random task' do
+          create(:task)
+        end
+
+        it 'allows the technician to see only all his/her own tasks' do
           get '/api/v1/tasks'
 
-          expect(response.status).to eq(403)
+          expect(response.status).to eq(200)
+          expect(JSON.parse(response.body).size).to eq(1)
         end
       end
     end

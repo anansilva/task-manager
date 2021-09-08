@@ -10,6 +10,8 @@ module Pagination
   private
 
   def record_limit
+    return MAX_PAGE_LIMIT unless params[:limit]
+
     [
       params[:limit].to_i,
       MAX_PAGE_LIMIT

@@ -1,6 +1,6 @@
 class TaskPolicy < ApplicationPolicy
   def index?
-    user.manager?
+    true
   end
 
   def create?
@@ -12,10 +12,27 @@ class TaskPolicy < ApplicationPolicy
   end
 
   def show?
-    index? || update?
+    user.manager? || update?
   end
 
   def destroy?
-    index?
+    user.manager?
+  end
+
+  class Scope < TaskPolicy
+    attr_reader :user, :scope
+
+    def initialize(user, scope)
+      @user  = user
+      @scope = scope
+    end
+
+    def resolve
+      if user.manager?
+        scope.all
+      else
+        scope.where(user: user)
+      end
+    end
   end
 end

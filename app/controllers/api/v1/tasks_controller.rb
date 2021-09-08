@@ -4,10 +4,8 @@ module Api
       include Pagination
 
       def index
-        authorize Task
-
         tasks = paginate(
-          query: Task,
+          query: policy_scope(Task),
           limit: params[:limit],
           offset: params[:offset]
         )
@@ -46,7 +44,6 @@ module Api
       end
 
       private
-
 
       def task
         @task ||= Task.find_by(id: params[:id])
