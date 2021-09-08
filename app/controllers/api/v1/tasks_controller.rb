@@ -1,10 +1,14 @@
 module Api
   module V1
     class TasksController < ApplicationController
+      MAX_PAGE_LIMIT = 50.freeze
+
       def index
         authorize Task
 
-        render json: Task.all, status: 200
+        tasks = Task.limit(record_limit).offset(params[:offset])
+
+        render json: tasks, status: 200
       end
 
       def create
@@ -38,6 +42,15 @@ module Api
       end
 
       private
+
+      def record_limit
+        return MAX_PAGE_LIMIT unless params[:limit]
+
+        [
+          params[:limit].to_i,
+          MAX_PAGE_LIMIT
+        ].min
+      end
 
       def task
         @task ||= Task.find_by(id: params[:id])
