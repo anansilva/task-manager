@@ -29,7 +29,7 @@ class TaskPolicy < ApplicationPolicy
 
     def resolve
       if user.manager?
-        scope.all
+        scope
       else
         scope.where(user: user)
       end
