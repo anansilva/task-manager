@@ -14,4 +14,8 @@ class TaskPolicy < ApplicationPolicy
   def show?
     index? || update?
   end
+
+  def destroy?
+    index?
+  end
 end
