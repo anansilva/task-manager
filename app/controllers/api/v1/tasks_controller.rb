@@ -6,6 +6,20 @@ module Api
 
         render json: Task.all
       end
+
+      def create
+        authorize Task
+
+        task = Task.create!(user_id: current_user.id, summary: task_params[:summary])
+
+        render json: task, status: 201
+      end
+
+      private
+
+      def task_params
+        params.require(:task).permit(:summary)
+      end
     end
   end
 end

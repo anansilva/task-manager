@@ -10,13 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_08_134851) do
+ActiveRecord::Schema.define(version: 2021_09_08_143139) do
 
   create_table "tasks", charset: "utf8mb3", force: :cascade do |t|
     t.text "summary"
     t.timestamp "performed_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_tasks_on_user_id"
   end
 
   create_table "users", charset: "utf8mb3", force: :cascade do |t|
@@ -27,4 +29,5 @@ ActiveRecord::Schema.define(version: 2021_09_08_134851) do
     t.integer "role"
   end
 
+  add_foreign_key "tasks", "users"
 end
