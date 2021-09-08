@@ -1,6 +1,8 @@
 module Api
   module V1
     class UsersController < ApplicationController
+      skip_before_action :authorize_request
+
       def create
         user = User.create!(user_params)
         auth_token = authenticate_user!
