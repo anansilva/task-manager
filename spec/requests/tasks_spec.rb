@@ -75,7 +75,9 @@ describe 'Tasks', type: :request do
         let(:technician) { create(:user, role: 1) }
 
         it 'allows the technician to create his/her own tasks' do
-          post "/api/v1/tasks", params: { task: { summary: 'test task creation' } }
+          post "/api/v1/tasks", params: {
+            task: { name: 'test', summary: 'test task creation' }
+          }
 
           expect(response.status).to eq(201)
         end
@@ -103,7 +105,9 @@ describe 'Tasks', type: :request do
         let(:task) { create(:task, user_id: technician.id, summary: 'current summary') }
 
         it 'does not allow the manager to update tasks' do
-          put "/api/v1/tasks/#{task.id}", params: { task: { summary: 'new summary' } }
+          put "/api/v1/tasks/#{task.id}", params: {
+            task: { summary: 'new summary', name: 'new name' }
+          }
 
           expect(response.status).to eq(403)
           expect(task.reload.summary).to eq('current summary')

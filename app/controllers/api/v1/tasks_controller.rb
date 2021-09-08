@@ -16,7 +16,11 @@ module Api
       def create
         authorize Task
 
-        task = Task.create!(user_id: current_user.id, summary: task_params[:summary])
+        task = Task.create!(
+          user_id: current_user.id,
+          name: task_params[:name],
+          summary: task_params[:summary]
+        )
 
         render json: task, status: 201
       end
@@ -24,7 +28,9 @@ module Api
       def update
         authorize task
 
-        task.update!(summary: task_params[:summary])
+        task.update!(
+          name: task_params[:name],
+          summary: task_params[:summary])
 
         render json: task, status: 200
       end
@@ -58,7 +64,7 @@ module Api
       end
 
       def task_params
-        params.require(:task).permit(:summary)
+        params.require(:task).permit(:name, :summary)
       end
     end
   end
