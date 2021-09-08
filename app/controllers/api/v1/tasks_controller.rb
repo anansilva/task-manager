@@ -15,7 +15,19 @@ module Api
         render json: task, status: 201
       end
 
+      def update
+        authorize task
+
+        task.update!(summary: task_params[:summary])
+
+        render json: task, status: 200
+      end
+
       private
+
+      def task
+        @task ||= Task.find_by(id: params[:id])
+      end
 
       def task_params
         params.require(:task).permit(:summary)
