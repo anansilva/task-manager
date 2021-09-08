@@ -1,14 +1,9 @@
 module Api
   module V1
-    class UsersController < ApplicationController
-      def create
-        user = User.create!(user_params)
+    class AuthenticationController < ApplicationController
+      def authenticate
         auth_token = authenticate_user!
-
-        render json: {
-          message: 'Account created successfully!',
-          auth_token: auth_token,
-        }, status: 201
+        render json: { auth_token: auth_token }
       end
 
       private
