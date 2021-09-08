@@ -10,4 +10,8 @@ class TaskPolicy < ApplicationPolicy
   def update?
     user.technician? && record.user_id == user.id
   end
+
+  def show?
+    index? || update?
+  end
 end

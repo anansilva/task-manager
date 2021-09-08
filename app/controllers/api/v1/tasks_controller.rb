@@ -4,7 +4,7 @@ module Api
       def index
         authorize Task
 
-        render json: Task.all
+        render json: Task.all, status: 200
       end
 
       def create
@@ -19,6 +19,12 @@ module Api
         authorize task
 
         task.update!(summary: task_params[:summary])
+
+        render json: task, status: 200
+      end
+
+      def show
+        authorize task
 
         render json: task, status: 200
       end

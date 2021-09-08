@@ -29,7 +29,7 @@ describe 'Tasks', type: :request do
     end
 
     context 'user is not authenticated' do
-      it 'returns all tasks' do
+      it 'does not allow tasks to be viewed' do
         get '/api/v1/tasks'
 
         expect(response.status).to eq(401)
@@ -67,9 +67,17 @@ describe 'Tasks', type: :request do
         end
       end
     end
+
+    context 'user is not authenticated' do
+      it 'does not allow tasks to be created' do
+        post "/api/v1/tasks", params: { task: { summary: 'test task creation' } }
+
+        expect(response.status).to eq(401)
+      end
+    end
   end
 
-  describe 'PUT /tasks' do
+  describe 'PUT /tasks/:id' do
     context 'user is authenticated' do
       context 'user is a manager' do
         before 'authenticate user' do
@@ -102,7 +110,7 @@ describe 'Tasks', type: :request do
           expect(response.status).to eq(200)
         end
 
-        it 'does not allows the technician to other technicians\' tasks' do
+        it 'does not allows the technician to update other technicians\' tasks' do
           another_technician = create(:user, role: 1)
           another_task = create(:task, user_id: another_technician.id, summary: 'abc')
 
@@ -110,6 +118,66 @@ describe 'Tasks', type: :request do
 
           expect(response.status).to eq(403)
         end
+      end
+    end
+
+    context 'user is not authenticated' do
+      it 'does not allow updates' do
+        put "/api/v1/tasks/123", params: { task: { summary: 'new summary' } }
+
+        expect(response.status).to eq(401)
+      end
+    end
+  end
+
+  describe 'GET /tasks/:id' do
+    context 'user is authenticated' do
+      context 'user is a manager' do
+        before 'authenticate user' do
+          allow(Services::AuthorizeApiRequest).to receive(:call).and_return(manager)
+        end
+
+        let(:manager) { create(:user, role: 0) }
+        let(:technician) { create(:user, role: 1) }
+        let(:task) { create(:task, user_id: technician.id, summary: 'current summary') }
+
+        it 'allows the manager to see all technicians\s tasks' do
+          get "/api/v1/tasks/#{task.id}"
+
+          expect(response.status).to eq(200)
+        end
+      end
+
+      context 'user is a technician' do
+        before 'authenticate user' do
+          allow(Services::AuthorizeApiRequest).to receive(:call).and_return(technician)
+        end
+
+        let(:technician) { create(:user, role: 1) }
+        let(:task) { create(:task, user_id: technician.id, summary: 'current summary') }
+
+        it 'allows the technician to see his/her own tasks' do
+          get "/api/v1/tasks/#{task.id}"
+
+          expect(response.status).to eq(200)
+        end
+
+        it 'does not allows the technician to see other technicians\' tasks' do
+          another_technician = create(:user, role: 1)
+          another_task = create(:task, user_id: another_technician.id, summary: 'abc')
+
+          get "/api/v1/tasks/#{another_task.id}"
+
+          expect(response.status).to eq(403)
+        end
+      end
+    end
+
+    context 'user is not authenticated' do
+      it 'does not allow any tasks to be viewed' do
+        get "/api/v1/tasks/123"
+
+        expect(response.status).to eq(401)
       end
     end
   end
