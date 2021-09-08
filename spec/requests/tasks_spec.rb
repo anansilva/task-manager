@@ -247,4 +247,56 @@ describe 'Tasks', type: :request do
       end
     end
   end
+
+  describe 'POST /tasks/:id/perform' do
+    context 'user is authenticated' do
+      context 'user is a manager' do
+        before 'authenticate user' do
+          allow(Services::AuthorizeApiRequest).to receive(:call).and_return(manager)
+        end
+
+        let(:manager) { create(:user, role: 0) }
+        let(:technician) { create(:user, role: 1) }
+        let(:task) { create(:task, user_id: technician.id) }
+
+        it 'does not allow the manager to perform tasks' do
+          post "/api/v1/tasks/#{task.id}/perform"
+
+          expect(response.status).to eq(403)
+        end
+      end
+
+      context 'user is a technician' do
+        before 'authenticate user' do
+          allow(Services::AuthorizeApiRequest).to receive(:call).and_return(technician)
+        end
+
+        let(:technician) { create(:user, role: 1) }
+        let(:task) { create(:task, user_id: technician.id) }
+
+        it 'allows the technician to perform his/her own tasks' do
+          post "/api/v1/tasks/#{task.id}/perform"
+
+          expect(response.status).to eq(200)
+        end
+
+        it 'does not allows the technician to perform other technicians\' tasks' do
+          another_technician = create(:user, role: 1)
+          another_task = create(:task, user_id: another_technician.id)
+
+          post "/api/v1/tasks/#{another_task.id}/perform"
+
+          expect(response.status).to eq(403)
+        end
+      end
+    end
+
+    context 'user is not authenticated' do
+      it 'does not allow tasks to be performed' do
+        post "/api/v1/tasks/123/perform"
+
+        expect(response.status).to eq(401)
+      end
+    end
+  end
 end

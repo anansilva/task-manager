@@ -43,6 +43,14 @@ module Api
         render json: {}, status: 204
       end
 
+      def perform
+        authorize task
+
+        task.update!(performed_at: Time.now.utc)
+
+        render json: task, status: 200
+      end
+
       private
 
       def task

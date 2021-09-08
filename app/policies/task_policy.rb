@@ -19,6 +19,10 @@ class TaskPolicy < ApplicationPolicy
     user.manager?
   end
 
+  def perform?
+    user.technician? && record.user_id == user.id
+  end
+
   class Scope < TaskPolicy
     attr_reader :user, :scope
 

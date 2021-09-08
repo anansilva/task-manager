@@ -1,7 +1,10 @@
 Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
-      resources :tasks
+      resources :tasks do
+        post :perform, on: :member
+      end
+
 
       post '/signup', to: 'users#create'
       post '/authenticate', to: 'authentication#authenticate'
