@@ -1,14 +1,18 @@
 class ApplicationController < ActionController::API
+  include Pundit
   before_action :authorize_request
 
   rescue_from ActiveRecord::RecordInvalid, with: :record_not_saved
   rescue_from Errors::AuthenticationError, with: :user_not_authenticated
   rescue_from Errors::AuthorizationTokenError, with: :request_not_authorized
+  rescue_from Pundit::NotAuthorizedError, with: :no_permission
+
+  attr_reader :current_user
 
   private
 
   def authorize_request
-    Services::AuthorizeApiRequest.call(headers: request.headers)
+    @current_user = Services::AuthorizeApiRequest.call(headers: request.headers)
   end
 
   def record_not_saved(e)
@@ -21,5 +25,9 @@ class ApplicationController < ActionController::API
 
   def request_not_authorized(e)
     render json: { errors: e.message }, status: 401
+  end
+
+  def no_permission(e)
+    render json: { errors: e.message }, status: 403
   end
 end

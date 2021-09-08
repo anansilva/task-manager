@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_07_144518) do
+ActiveRecord::Schema.define(version: 2021_09_08_134851) do
 
   create_table "tasks", charset: "utf8mb3", force: :cascade do |t|
     t.text "summary"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 2021_09_07_144518) do
     t.string "password_digest"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "role"
   end
 
 end
