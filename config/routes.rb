@@ -5,6 +5,7 @@ Rails.application.routes.draw do
         post :perform, on: :member
       end
 
+      resources :notifications, only: :index
 
       post '/signup', to: 'users#create'
       post '/authenticate', to: 'authentication#authenticate'
