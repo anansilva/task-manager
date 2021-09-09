@@ -6,6 +6,8 @@ services:
       - mysql:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=root
+  redis:
+    image: redis
   web:
     build: .
     container_name: task-manager-web
@@ -17,6 +19,14 @@ services:
       - "3000:3000"
     depends_on:
       - db
+  sidekiq:
+    build: .
+    command: bundle exec sidekiq
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - .:/app
 volumes:
   mysql:
   bundler_gems:
