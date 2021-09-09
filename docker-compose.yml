@@ -20,9 +20,12 @@ services:
     depends_on:
       - redis
       - db
+    links:
+      - sidekiq
   sidekiq:
     build: .
-    command: bundle exec sidekiq
+    container_name: task-manager-jobs
+    command: bash -c "bundle exec sidekiq"
     depends_on:
       - db
       - redis
