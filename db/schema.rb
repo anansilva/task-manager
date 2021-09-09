@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_08_175510) do
+ActiveRecord::Schema.define(version: 2021_09_09_175231) do
 
   create_table "notifications", charset: "utf8mb3", force: :cascade do |t|
     t.text "message"
@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(version: 2021_09_08_175510) do
     t.string "password_digest"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "role"
+    t.integer "role", default: 1
   end
 
   add_foreign_key "tasks", "users"

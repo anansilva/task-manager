@@ -10,8 +10,6 @@ Rails.application.routes.draw do
         put :mark_as_unread, on: :member
       end
 
-
-
       post '/signup', to: 'users#create'
       post '/authenticate', to: 'authentication#authenticate'
     end

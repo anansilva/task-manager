@@ -8,7 +8,7 @@ module Api
         auth_token = authenticate_user!
 
         render json: {
-          message: 'Account created successfully!',
+          message: "#{user.serialize_role} account created successfully!",
           auth_token: auth_token,
         }, status: 201
       end
@@ -23,7 +23,7 @@ module Api
       end
 
       def user_params
-        params.permit(:email, :password)
+        params.permit(:email, :password, :role)
       end
     end
   end

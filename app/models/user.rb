@@ -10,4 +10,12 @@ class User < ApplicationRecord
   def technician?
     role == 1
   end
+
+  def serialize_role
+    if role == 0
+      'Manager'
+    else
+      'Technician'
+    end
+  end
 end
