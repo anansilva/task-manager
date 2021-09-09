@@ -11,9 +11,17 @@ describe 'Users', type: :request do
       end
     end
 
-    context 'when credentials are not valid' do
+    context 'when password is not sent' do
       it 'does not sign up the user' do
         post '/api/v1/signup', params: { email: 'test@test.com' }
+
+        expect(response.status).to eq(422)
+      end
+    end
+
+    context 'when email is not sent' do
+      it 'does not sign up the user' do
+        post '/api/v1/signup', params: { password: 'test@test.com' }
 
         expect(response.status).to eq(422)
       end
