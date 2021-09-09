@@ -53,6 +53,7 @@ module Api
         authorize task
 
         task.update!(performed_at: Time.now.utc)
+        send_notification_to_manager!
 
         render json: task, status: 200
       end
@@ -65,6 +66,14 @@ module Api
 
       def task_params
         params.require(:task).permit(:name, :summary)
+      end
+
+      def send_notification_to_manager!
+        NotificationWorker.perform_async(
+          current_user.email,
+          task.name,
+          task.performed_at
+        )
       end
     end
   end

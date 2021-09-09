@@ -30,5 +30,20 @@ describe Api::V1::TasksController, type: :controller do
       get :index, params: { limit: 100 }
     end
   end
+
+  describe 'POST #perform' do
+    let(:user) { create(:user, role: 1) }
+    let(:task) { create(:task, user: user, name: 'test', performed_at: 2.seconds.ago) }
+
+    before 'authenticate user' do
+      allow(Services::AuthorizeApiRequest).to receive(:call).and_return(user)
+    end
+
+    it 'creates a job to be processed asynchronously' do
+      expect(NotificationWorker).to receive(:perform_async)
+
+      post :perform, params: { id: task.id }
+    end
+  end
 end
 
