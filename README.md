@@ -15,9 +15,7 @@ It uses:
 
 Runs on localhost port 3000.
 
-### If you're running this command for the first time, you'll need to create a database:
-
-In another terminal run: 
+If you're running this command for the first time, you'll need to create a database. In another terminal run: 
 
 `docker-compose run web db:create db:migrate`
 
