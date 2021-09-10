@@ -25,6 +25,10 @@ If you're running this command for the first time, you'll need to create a datab
 
 ## To run the test suit locally:
 
+`docker-compose -f docker-compose.tdd.yml up`
+
+In another terminal run: 
+
 `docker-compose -f docker-compose.tdd.yml run tdd rspec spec`
 
 ## API documentation:
