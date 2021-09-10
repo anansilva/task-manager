@@ -18,4 +18,4 @@ Built with ruby on rails.
 
 ## API documentation:
 
-[API Documenation WIKI](https://github.com/anansilva/task-manager-rails/wiki/API-Documentation)
+[API Documentation WIKI](https://github.com/anansilva/task-manager-rails/wiki/API-Documentation)
