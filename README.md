@@ -2,13 +2,20 @@
 
 RESTful API to manage tasks.
 
-Built with ruby on rails.
+Built with ruby on rails. 
+
+It uses:
+- [JSON Web Token (JWT)](https://jwt.io/) for authentication
+- [sidekiq](https://github.com/mperham/sidekiq) to process notifications in the background
+- [pundit](https://github.com/varvet/pundit) to manage authorizations
 
 ## To run the application locally:
 
 `docker-compose up`
 
-## To see background jobs' logs separately:
+Runs on localhost port 3000.
+
+## To see the logs for the background processes, separately:
 
 `docker-compose up sidekiq`
 
