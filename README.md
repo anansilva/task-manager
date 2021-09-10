@@ -17,7 +17,7 @@ Runs on localhost port 3000.
 
 If you're running this command for the first time, you'll need to create a database. In another terminal run: 
 
-`docker-compose run web db:create db:migrate`
+`docker-compose run web rails db:create db:migrate`
 
 ## To see the logs for the background processes, separately:
 
