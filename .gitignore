@@ -27,7 +27,5 @@
 /config/master.key
 
 # Ignore all environment configuration files
-/config/database.yml
-/config/redis.yml
 .env
 config/locales
