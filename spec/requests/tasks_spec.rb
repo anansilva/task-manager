@@ -264,7 +264,7 @@ describe 'Tasks', type: :request do
         let(:task) { create(:task, user_id: technician.id) }
 
         it 'does not allow the manager to perform tasks' do
-          post "/api/v1/tasks/#{task.id}/perform"
+          put "/api/v1/tasks/#{task.id}/perform"
 
           expect(response.status).to eq(403)
         end
@@ -279,7 +279,7 @@ describe 'Tasks', type: :request do
         let(:task) { create(:task, user_id: technician.id) }
 
         it 'allows the technician to perform his/her own tasks' do
-          post "/api/v1/tasks/#{task.id}/perform"
+          put "/api/v1/tasks/#{task.id}/perform"
 
           expect(response.status).to eq(200)
         end
@@ -288,7 +288,7 @@ describe 'Tasks', type: :request do
           another_technician = create(:user, role: 1)
           another_task = create(:task, user_id: another_technician.id)
 
-          post "/api/v1/tasks/#{another_task.id}/perform"
+          put "/api/v1/tasks/#{another_task.id}/perform"
 
           expect(response.status).to eq(403)
         end
@@ -297,7 +297,7 @@ describe 'Tasks', type: :request do
 
     context 'user is not authenticated' do
       it 'does not allow tasks to be performed' do
-        post "/api/v1/tasks/123/perform"
+        put "/api/v1/tasks/123/perform"
 
         expect(response.status).to eq(401)
       end

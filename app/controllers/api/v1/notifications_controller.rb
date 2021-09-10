@@ -15,7 +15,7 @@ module Api
         render json: tasks, status: 200
       end
 
-      def mark_as_read
+      def read
         authorize Notification
 
         notification.update!(status: 1)
@@ -23,7 +23,7 @@ module Api
         render json: notification, status: 200
       end
 
-      def mark_as_unread
+      def unread
         authorize Notification
 
         notification.update!(status: 0)

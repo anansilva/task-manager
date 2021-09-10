@@ -3,11 +3,11 @@ class NotificationPolicy < ApplicationPolicy
     user.manager?
   end
 
-  def mark_as_read?
+  def read?
     user.manager?
   end
 
-  def mark_as_unread?
-    mark_as_read?
+  def unread?
+    read?
   end
 end

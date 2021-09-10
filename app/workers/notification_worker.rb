@@ -11,6 +11,9 @@ class NotificationWorker
   private
 
   def notification_message(technician_email, task_name, performed_at)
-    "The technician #{technician_email} performed the task #{task_name} on #{performed_at}"
+    """
+      The technician #{technician_email} performed the task '#{task_name}'
+      on #{performed_at}.
+    """
   end
 end
